@@ -1,0 +1,200 @@
+<html>
+<body background = "http://wallpapercave.com/wp/XbmNalC.jpg">
+<h1 style="font-family: impact">Dragon Ball Dodge Game</h1>
+<h2 id="level"></h2>
+
+<button onclick="game.env.running = false;">STOP!</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<button onclick="game.env.running = true;render();">INCREASE DIFFICULTY!</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<button onclick="game.env.running = true;render();">RESUME</button><br><br>
+ <img src="http://pre00.deviantart.net/01d8/th/pre/i/2015/039/2/d/goku_and_little_gohan_by_princessnikoru-d8h7krp.jpg"
+       width="20%" height="700">
+
+<script type="text/javascript">
+	var name;
+	name = prompt("Enter player name below");
+	var level = 0;
+	
+	var canvas = document.createElement('canvas');
+	canvas.width = 1000;
+	canvas.height = 700;
+	canvas.style.backgroundColor = "pink";
+	document.body.appendChild(canvas);
+
+	var context = canvas.getContext('2d');
+
+	var game = {
+		bgimage: {
+			x: 0, y: 0, w: 1000, h: 1000, img: new Image()
+	    } ,
+		env: {w: 1000, h:700, running: true},
+		enemy : {
+			x: 200, y: 100, w: 65, h: 100, vx: 0, vy: 5, color: 'red', moving: true,  img: new Image()
+		} ,
+		enemy2 : {
+			x: 450, y: 100, w: 80, h: 80, vx: 0, vy: 7, color: 'black', moving: true, img: new Image()
+		} ,
+		enemy3 : {
+			x: 700, y: 100, w: 80, h: 120, vx: 0, vy: 7, color: 'black', moving: true, img: new Image()
+		} ,
+		player:{
+			x: 10,y: 300, w:120, h:160, vx: 5, vy:0, color:'blue', moving: false, img: new Image()
+		} ,
+		finish:{
+			x: 900,y: 300, w:120, h:160, vx: 5, vy:0, color:'#41FF00', moving: false, img: new Image()
+		}
+}
+		game.player.img.src = "http://www.pngmart.com/files/2/Goku-PNG-Photo.png";
+		game.enemy2.img.src = "http://vignette4.wikia.nocookie.net/dragonballfanon/images/2/2b/Golden_frieza_dragonball_heroes_by_rayzorblade189-d8ulie9.png/revision/latest?cb=20160404223415";
+		game.enemy.img.src = "http://psrgdansk.pl/dbzu/7.png";
+		game.enemy3.img.src = "http://vignette3.wikia.nocookie.net/vsbattles/images/a/af/Hit_(DBS).png/revision/latest?cb=20160426172214";
+		game.finish.img.src = "http://vignette3.wikia.nocookie.net/dbz-vs/images/9/9c/Beerus-0.png/revision/latest?cb=20151206105013";
+		game.bgimage.img.src = "http://wallpapercave.com/wp/XbmNalC.jpg";	
+	function drawobj(ctx, obj){      //  a function to draw a object on the go
+
+		ctx.drawImage(obj.img, obj.x,obj.y,obj.w,obj.h);
+	}
+
+	function draw(){
+		context.clearRect(0,0,1000,700);
+		drawobj(context,game.bgimage);
+		drawobj(context, game.enemy);
+		if(level >= 1)
+			drawobj(context, game.enemy2);
+		if(level >= 2)
+			drawobj(context, game.enemy3);
+		drawobj(context, game.player);
+		drawobj(context, game.finish);
+	}
+
+	function updateObj(obj){
+		if(obj.moving == true){
+		obj.x += obj.vx;
+		obj.y += obj.vy;
+		if(obj.y + obj.h > game.env.h || obj.y < 0)
+			obj.vy *= -1;
+		if(obj.x + obj.w > game.env.w || obj.x < 0)
+			obj.vx *= -1;
+	}
+	}
+	var c;
+	var x;
+	function update() {
+		updateObj(game.enemy);
+		if(level >= 1)
+			updateObj(game.enemy2);
+		updateObj(game.player);
+		if(level >= 2)
+			updateObj(game.enemy3);
+		if(isColliding(game.enemy, game.player)){
+			x = prompt("GAME OVER!Broly got u! Wanna play again? Type 1 for yes and 0 for no");
+			game.env.running = false;
+			if(x == 1){
+				game.env.running = true;
+				level = 0;
+				game.player.x =10;
+				game.enemy.vx = 0;
+				game.enemy.vy = 5;
+				game.enemy.x = 200;
+				game.enemy.y = 100;
+				game.enemy2.x = 450;
+				game.enemy2.y = 100;
+				game.enemy3.x = 700;
+				game.enemy3.y = 100;
+				game.player.moving = false;
+			}
+		}
+		if(isColliding(game.enemy2, game.player)){
+			x = prompt("GAME OVER!Frieza got u! Wanna play again? Type 1 for yes and 0 for no");
+			game.env.running = false;
+			if(x == 1){
+				game.env.running = true;
+				level = 1;
+				game.player.x =10;
+				game.enemy.vy = 5;
+				game.enemy.vy = 5;
+				game.enemy.x = 200;
+				game.enemy.y = 100;
+				game.enemy2.x = 450;
+				game.enemy2.y = 100;
+				game.enemy3.x = 700;
+				game.enemy3.y = 100;
+				game.player.moving = false;
+			}
+		}
+		if(isColliding(game.enemy3, game.player)){
+			x = prompt("GAME OVER!Hit got u! Wanna play again? Type 1 for yes and 0 for no");
+			game.env.running = false;
+			if(x == 1){
+				game.env.running = true;
+				level = 2;
+				game.player.x =10;
+				game.enemy.vx = 0;
+				game.enemy.vy = 5;
+				game.enemy.x = 200;
+				game.enemy.y = 100;
+				game.enemy2.x = 450;
+				game.enemy2.y = 100;
+				game.enemy3.x = 700;
+				game.enemy3.y = 100;
+				game.player.moving = false;
+			}
+		}
+		if(isColliding(game.player, game.finish)){
+			alert("YOU WON!");
+			game.env.running = false;
+			c = prompt("Wanna play next level? Type 1 for yes and 0 for no");
+			if(c == 1){
+				level++;
+				game.player.x = 10;
+				game.player.moving = false;
+				game.env.running = true;
+			}
+			if(level == 3){
+				game.enemy.vx = 2;
+				game.enemy.vy = 2;
+			}
+		}
+		var des;
+		if(level == 0)
+			des = "Legendary Super Saiyan Broly";
+		if(level == 1)
+			des = "Arc Rival Frieza";
+		if(level == 2)
+			des = "Legendary hitman HIT";
+	document.getElementById('level').innerHTML = "Level: " + (level+1) + "("+ des + ")<br> Hey "+ name + "... Goku needs your help to reach beerus to train... Can u help him to reach there without getting obstructed by his enemies?? ;P   Click anywhere on the canvas to move :) "; 
+	}
+
+	function isColliding(obj1,obj2) {
+		var case1 = false, case2 = false;
+		var distX = Math.abs((obj1.x + obj1.w/2) - (obj2.x + obj2.w/2));
+		var distY = Math.abs((obj1.y + obj1.h/2) - (obj2.y + obj2.h/2));
+		if(distX < (obj1.w/2 + obj2.w/2)) case1 = true;
+		if(distY < (obj1.h/2 + obj2.h/2)-5) case2 = true;
+		return (case1&&case2);
+			
+	}
+
+	function render(){
+		console.log("hmm");
+		draw();
+		update();
+	canvas.addEventListener("mousedown", function(){
+		game.player.moving = true;
+	});
+	canvas.addEventListener("mouseup", function(){
+		game.player.moving = false;
+	});
+
+		if(game.env.running)
+		window.requestAnimationFrame(render);
+
+}
+
+	render();
+
+</script>
+
+<canvas></canvas>
+
+</body>
+</html>
